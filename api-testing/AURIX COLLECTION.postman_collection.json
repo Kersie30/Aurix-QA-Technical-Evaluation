@@ -1,0 +1,202 @@
+{
+  "info": {
+    "_postman_id": "6b5dcbbe-8cdd-4324-a9bf-6252d30332a3",
+    "name": "AURIX COLLECTION",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46035435",
+    "_collection_link": "https://go.postman.co/collection/46035435-6b5dcbbe-8cdd-4324-a9bf-6252d30332a3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth login",
+      "item": [
+        {
+          "name": "login page",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Get the full HTML response from the AURIX login page\r\nconst html = pm.response.text();\r\n\r\n// Find the CSRF token inside the hidden input field\r\nconst match = html.match(\r\n    /name=[\"']csrf_token[\"'][^>]*value=[\"']([^\"']+)[\"']/\r\n);\r\n\r\n// Check whether the token was found\r\nif (match && match[1]) {\r\n\r\n    // Save the CSRF token as a collection variable\r\n    pm.collectionVariables.set(\"csrf_token\", match[1]);\r\n\r\n    // Confirmation in Postman Console\r\n    console.log(\"CSRF token captured successfully.\");\r\n\r\n    // Optional test so the request clearly shows as passed\r\n    pm.test(\"CSRF token captured\", function () {\r\n        pm.expect(match[1]).to.be.a(\"string\").and.not.empty;\r\n    });\r\n\r\n} else {\r\n\r\n    // Clear old value in case token capture failed\r\n    pm.collectionVariables.unset(\"csrf_token\");\r\n\r\n    console.log(\"CSRF token was not found in the response.\");\r\n\r\n    // Fail the test so you know something went wrong\r\n    pm.test(\"CSRF token should be present\", function () {\r\n        pm.expect.fail(\"CSRF token not found in login page HTML.\");\r\n    });\r\n}\r\n\r\n// Confirm that GET login page responded successfully\r\npm.test(\"Login page returned HTTP 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Confirm that the response is HTML\r\npm.test(\"Response contains login page HTML\", function () {\r\n    pm.expect(html.toLowerCase()).to.include(\"<html\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://aurixapp.de/auth/login.php",
+              "protocol": "https",
+              "host": [
+                "aurixapp",
+                "de"
+              ],
+              "path": [
+                "auth",
+                "login.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "valid login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "csrf_token",
+                  "value": "623622b5e2992ae99553ae48f8df562cc49ddaa6d9fcb03c3a85ad64f684a65f"
+                },
+                {
+                  "key": "email",
+                  "value": "karumakersie0@gmail.com"
+                },
+                {
+                  "key": "password",
+                  "value": "Brighton1"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://aurixapp.de/auth/login.php",
+              "protocol": "https",
+              "host": [
+                "aurixapp",
+                "de"
+              ],
+              "path": [
+                "auth",
+                "login.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "current user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unauthorized current user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://aurixapp.de/auth/me.php",
+              "protocol": "https",
+              "host": [
+                "aurixapp",
+                "de"
+              ],
+              "path": [
+                "auth",
+                "me.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Wrong password",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wallet operations",
+      "item": [
+        {
+          "name": "Buy- valid Transaction",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sell- valid transaction",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Security validation",
+      "item": [
+        {
+          "name": "Unauthorized request- no token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "expired token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "csrf_token",
+      "value": ""
+    }
+  ]
+}
